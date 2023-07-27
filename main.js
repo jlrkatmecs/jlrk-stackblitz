@@ -40,9 +40,16 @@ server.listen(PORT, () => {
 
 const path = require('path');
 const express = require('express');
+const { logMsg } = require('./logger');
 const app = express();
 const PORT = process.env.PORT || 3500;
 
+app.use((req, res, next) => {
+  logMsg(`${req.method}\t${req.url}`);
+  next();
+});
+
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '/public')));
 
