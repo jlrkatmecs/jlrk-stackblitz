@@ -41,14 +41,30 @@ server.listen(PORT, () => {
 const path = require('path');
 const express = require('express');
 const { logMsg } = require('./logger');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3500;
 
 app.use((req, res, next) => {
-  logMsg(`${req.method}\t${req.url}`);
+  logMsg(`${req.method}\t${req.headers.origin}\t${req.url}`);
   next();
 });
 
+const whitelist = ['https://localhost:3500', 'https://google.com'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    console.log('IndexOf : ' + whitelist.indexOf(origin));
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error(`${origin} - Not allowed by CORS`));
+    }
+  },
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '/public')));
