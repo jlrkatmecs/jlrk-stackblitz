@@ -69,6 +69,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '/public')));
 
+app.use('/', require('./routes/root'));
+app.use('/admin', require('./routes/admin'));
+app.use('/customer', require('./routes/customer'));
+
 app.get('^/$|index(.html)?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
