@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
-const basePath = path.join(__dirname, '..', 'views', 'admin');
+const basePath = path.join(__dirname, '..', 'views');
 
 router.use((req, res, next) => {
-  console.log('Admin Time:', Date.now());
+  console.log('Root Time:', Date.now());
   next();
 });
 
